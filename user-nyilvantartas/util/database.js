@@ -7,5 +7,7 @@ db.prepare(`CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREME
 export const getUsers = () => db
     .prepare('SELECT * FROM users ').all();
 
+export const getUserByEmail = (emailAddress) => db.prepare("SELECT * FROM users WHERE emailAddress = ?").run(emailAddress)
+
 export const saveUser = (emailAddress, password) => db
     .prepare('INSERT INTO users (emailAddress, password) VALUES (?,?)').run(emailAddress, password);

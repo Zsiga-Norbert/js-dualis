@@ -41,6 +41,29 @@ async function postUserFunction(body) {
   }
 }
 
+async function loginUserFunction(body) {
+  try {
+    const res = await fetch(`http://localhost:3000/users/login`, {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+      body: body,
+    });
+    const data = await res.json();
+
+    if (!res.ok) {
+      console.log(data.description);
+      return;
+    }
+
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const surface = document.getElementById("surface");
 
@@ -89,14 +112,7 @@ async function login() {
     return;
   }
 
-  const users = await getAllUserFunction();
-  console.log("")
-  users.forEach((user) => {
-    if (user.emailAddress == email && user.password == password) {
-      userFound = true;
-      return;
-    }
-  });
+ userFound =await loginUserFunction(JSON.stringify({emailAddress : email, password : password}))
   if (userFound) {
     surface.innerHTML = `<p>Gratulálok ${email}, bejelentkezett!</p>`;
     surface.innerHTML += "<button onclick='logout()'> Kilépés </button>";
