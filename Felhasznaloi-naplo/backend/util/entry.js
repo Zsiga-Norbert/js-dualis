@@ -1,11 +1,11 @@
 import db from "./database.js"
 
-db.prepare('CREATE TABLE IF NOT EXISTS entries (id INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER, title STRING UNIQUE, content STRING, createdAt DATE)').run()
+db.prepare('CREATE TABLE IF NOT EXISTS entries (id INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER, title STRING UNIQUE, content STRING, createdAt STRING)').run()
 
 export const getEntryById = (id) =>
   db.prepare("SELECT * FROM entries WHERE id = ?").get(id);
 
-export const getEntriesByUserId = (userId) => db.prepare("SELECT * FROM entries WHERE userId = ?").get(userId)
+export const getEntriesByUserId = (userId) => db.prepare("SELECT * FROM entries WHERE userId = ?").all(userId)
 
 export const saveEntry = (userId, title, content, createdAt) => db.prepare("INSERT INTO entries(userId, title, content, createdAt) VALUES (?,?,?,?)").run(userId, title, content, createdAt)
 

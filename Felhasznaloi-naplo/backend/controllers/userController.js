@@ -1,5 +1,5 @@
 import * as users from "../util/user.js";
-
+  const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
 export const getUserById = (req, res) => {
   const id = req.params.id;
   const user = users.getUserById(id);
@@ -11,6 +11,10 @@ export const getUserById = (req, res) => {
 
 export const getUserByEmail = (req, res) => {
   const email = req.params.email;
+  if(!email.match(regex))
+  {
+    return res.status(401).json({ message: "invalid credentials" });
+  }
   const user = users.getUserByEmail(email);
   if (!user) {
     return res.status(404).json({ message: "user not found" });
@@ -49,3 +53,21 @@ export const deleteUser = (req, res) => {
   users.deleteUser(id);
   res.status(204);
 };
+
+export const login = (req, res) => {
+  const {email, password } = req.body;
+  if(!email || !password)
+  {
+    return res.status(401).json({message : "invalid credentials"})
+  }
+  const user = users.getUserByEmail(email)
+  if(!user)
+  {
+    return res.status(401).json({message : "invalid credentials"})
+  }
+  if(user.password != password)
+  {
+    return res.status(401).json({message : "invalid credentials"})
+  }
+return res.status(200).json(user.id)
+}
