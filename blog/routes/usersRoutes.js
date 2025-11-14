@@ -71,7 +71,8 @@ router.patch("/:id", auth, (req, res) => {
   Users.updateUser(
     id,
     name || user.name,
-    email || user.email || hashedPassword || user.hashedPassword
+    email || user.email,
+     hashedPassword || user.password
   );
   user = Users.getUserById(id);
   res.json(user);

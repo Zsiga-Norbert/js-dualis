@@ -19,7 +19,8 @@ export const getEntriesByUserId = (req, res) => {
 };
 
 export const saveEntry = (req, res) => {
-  const { userId, title, content } = req.body;
+  const userId = req.params.userId;
+  const {title, content } = req.body;
   if (!userId || !title || !content) {
     return res.status(400).json({ message: "missing data" });
   }
@@ -36,12 +37,22 @@ export const patchEntry = (req, res) => {
   }
   const { title, content } = req.body;
 
-  entries.updateEntry(id, title || entry.title, content || entry.content);
-  res.status(200).json({ message: "Updated" });
+  const result = entries.updateEntry(id, title || entry.title, content || entry.content);
+  if(result.changes > 0)
+  {
+      res.status(200).json({ message: "Updated" });
+  }
 };
 
 export const deleteEntry = (req, res) => {
   const id = +req.params.id;
-  entries.deleteEntry(id);
-  res.status(204);
+  const result = entries.deleteEntry(id);
+  if(result.changes > 0)
+  {
+      res.status(204).json({message: "deleted"});
+  }
+  else
+  {
+    res.status(404).json({ message: "Entry not found" })
+  }
 };

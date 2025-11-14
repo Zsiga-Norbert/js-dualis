@@ -1,6 +1,6 @@
 import db from "./database.js"
 
-db.prepare('CREATE TABLE IF NOT EXISTS entries (id INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER, title STRING UNIQUE, content STRING, createdAt STRING)').run()
+db.prepare('CREATE TABLE IF NOT EXISTS entries (id INTEGER PRIMARY KEY AUTOINCREMENT, userId INTEGER, title STRING UNIQUE, content STRING, createdAt STRING, FOREIGN KEY(userId) REFERENCES users(id) ON DELETE CASCADE)').run()
 
 export const getEntryById = (id) =>
   db.prepare("SELECT * FROM entries WHERE id = ?").get(id);

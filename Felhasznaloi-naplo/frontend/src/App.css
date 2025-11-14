@@ -5,38 +5,75 @@
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
+.inputField
+{
+  display: flex;
+  border-radius: 20px;
+  border: var(--borderColor) 2px solid;
+  padding: 2px 15px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  justify-self: center;
+  margin-bottom: 10px;
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.inputField input, .inputField textarea{
+  height: 25px;
+  border-radius: 10px;
+  padding: 2px;
+  margin: 10px;
+  width: 40%;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.passwordHideButton{
+  background-color:transparent;
+}
+a{
+  display: block;
+  margin: 10px;
+}
+.buttons{
+display: flex;
+justify-self: center;
+margin: 10px;
+
 }
 
-.card {
-  padding: 2em;
+.error{
+  color: red;
+  font-size: larger;
+  font-weight: bold;
 }
 
-.read-the-docs {
-  color: #888;
+#settingButton{
+  position: absolute;
+  top:5px;
+  right: 5%;
+}
+.entryItem{
+  border: var(--borderColor) 2px solid;
+  border-radius: 20px;
+  margin-bottom: 10px;
+}
+
+.entryItem h2{
+  border-bottom: var(--borderColor) 2px solid;
+  padding-bottom: 15px;
+}
+.entryItem div{
+  border-top: var(--borderColor) 2px solid;
+}
+.entryItem div p{
+  display: inline;
+
+}
+
+#entryAddButton{
+  margin: 20px;
+}
+
+.buttonCollection{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
 }

@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import apiClient from "../api/apiClient";
+import apiClient from "../api/apiClient.ts";
 
 const LoginPage = () => {
   const [email, setEmail] = useState<string>("");
@@ -11,7 +11,9 @@ const LoginPage = () => {
     useState<string>("fa fa-eye");
   const navigate = useNavigate();
   const regex: RegExp = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
+  useEffect(() => {
+    setAppTheme();
+  }, []);
   const signIn = () => {
     if (email.trim().length == 0 && password.trim().length == 0) {
       setError("Addj meg email címet és jelszót");
@@ -27,15 +29,20 @@ const LoginPage = () => {
       setError("Addj meg rendes emailt (pl:alma@sajt.com)");
       return;
     }
-    setEmail(email.trim())
-    setPassword(password.trim())
+    setEmail(email.trim());
+    setPassword(password.trim());
     apiClient
-      .post("/user/login", { email, password })
-      .then((respone) => { 
-        sessionStorage.setItem("userId", respone.data)
-        navigate("/entry/list") 
+    .post("/user/login", { email, password })
+    .then((respone) => {
+      apiClient.defaults.headers.common["Authorization"] = `Bearer ${respone.data.token}`;
+      sessionStorage.setItem("userId",respone.data.userId);
+      navigate("/entry/list")
     })
-      .catch((e) => console.log(e));
+    .catch((e) => {
+      if (e.status == 401) {
+        setError("Téves felhasználó név vagy jelszó");
+      }
+    });
   };
 
   const ChangePasswordVisibility = () => {
@@ -48,27 +55,50 @@ const LoginPage = () => {
     }
   };
 
+  const setAppTheme = () => {
+    let theme = localStorage.getItem("theme");
+    if (!theme) {
+      theme = "light";
+    }
+    if (theme == "light") {
+      document.documentElement.setAttribute("data-theme", "dark");
+    } else {
+      document.documentElement.setAttribute("data-theme", "light");
+    }
+  };
+
   return (
     <>
       <div>
-        <h2>Email</h2>
-        <input
-          type="text"
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="email"
-        />
-        <h2>Password</h2>
-        <input
-          type={passwordShowType}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="jelszó"
-        />
-        <button onClick={ChangePasswordVisibility}>
-          <i className={passwordShowButton}></i>
+        <div className="inputField">
+          <h2>Email</h2>
+          <input
+            type="text"
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="email"
+          />
+        </div>
+        <div className="inputField">
+          <h2>Jelszó</h2>
+          <input
+            type={passwordShowType}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="jelszó"
+          />
+          <button
+            className="passwordHideButton"
+            onClick={ChangePasswordVisibility}
+          >
+            <i className={passwordShowButton}></i>
+          </button>
+        </div>
+        <a onClick={() => navigate("/register")}>
+          Nincs fiókod? Regisztrálj itt!
+        </a>
+        <button className="buttons" onClick={signIn}>
+          Bejelentkezés
         </button>
-        <a href="/Register">Nincs fiókod? Regisztrálj itt!</a>
-        <button onClick={signIn}>Bejelentkezés</button>
-        <p>{error}</p>
+        <p className="error">{error}</p>
       </div>
     </>
   );

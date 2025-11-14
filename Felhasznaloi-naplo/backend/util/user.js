@@ -1,6 +1,6 @@
 import db from "./database.js"
 
-db.prepare('CREATE TABLE If NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, name STRING UNIQUE, email STRING UNIQUE, password STRING)').run()
+db.prepare('CREATE TABLE If NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, name STRING, email STRING UNIQUE, password STRING)').run()
 
 export const getUserById = (id) =>
   db.prepare("SELECT * FROM users WHERE id = ?").get(id);

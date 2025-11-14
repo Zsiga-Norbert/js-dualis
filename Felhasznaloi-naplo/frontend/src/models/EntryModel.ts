@@ -2,6 +2,6 @@ export type EntryModel = {
     id?:number,
     content:string,
     title:string,
-    userId:number,
+    userId?:number,
     createdAt?:string
 }
